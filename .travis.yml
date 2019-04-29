@@ -5,7 +5,7 @@ dist: trusty
 sudo: required
 addons:
   sonarcloud:
-    organization: anasoid
+    organization: anasoid-github
     token:
       secure: $SONAR_TOKEN
 
