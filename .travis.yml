@@ -17,7 +17,7 @@ jdk:
 script:
   - npm run coverage
   - npm run build
-  - sonar-scanner
+  - sonar-scanner -Dsonar.verbose=true -X
 cache:
   directories:
   - '$HOME/.sonar/cache'
