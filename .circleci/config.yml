@@ -34,11 +34,6 @@ jobs:
            command: |
              npm run build
 
-       # npm tests!
-      - run:
-           name: npm test:ci
-           command: |
-             npm run test:ci
 
 
        # sonar!
