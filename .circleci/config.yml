@@ -1,0 +1,81 @@
+defaults: &defaults
+  #working_directory: ./circleci
+  docker:
+    - image: circleci/node:8
+
+version: 2
+jobs:
+
+  build_test:
+    <<: *defaults
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+       # npm run coverage!
+      - run:
+           name: npm run coverage
+           command: |
+             npm run coverage
+
+       # npm run build!
+      - run:
+           name: npm run build
+           command: |
+             npm run build
+
+       # npm tests!
+      - run:
+           name: npm test:ci
+           command: |
+             npm run test:ci
+
+
+       # sonar!
+      - run:
+           name: install sonar
+           command: |
+             sudo npm install -g sonarqube-scanner
+      - run:
+           name: Sonar scanner
+           command: |
+             sonar-scanner --debug    -Dsonar.organization=$sonar_organization  -Dsonar.login=$sonar_login
+
+       # save tests!
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/reports/
+            mkdir -p ~/reports/test/unit
+            cp -r ./coverage ~/reports;
+            cp -r ./test-results/test-report.junit.xml ~/reports/test/unit;
+          when: always
+
+      - store_test_results:
+          path: ~/reports/test
+      - store_artifacts:
+          path: ~/reports
+
+
+
+
+
+
+workflows:
+  version: 2
+  build_accept_deploy:
+    jobs:
+      - build_test
+
+
+
