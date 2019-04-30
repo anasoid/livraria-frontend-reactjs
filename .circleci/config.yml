@@ -53,7 +53,7 @@ jobs:
             mkdir -p ~/reports/
             mkdir -p ~/reports/test/unit
             cp -r ./coverage ~/reports;
-            cp -r ./test-results/test-report.junit.xml ~/reports/test/unit;
+
           when: always
 
       - store_test_results:
